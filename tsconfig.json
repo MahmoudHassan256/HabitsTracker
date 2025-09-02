@@ -6,8 +6,23 @@
 
     "baseUrl": ".",
     "paths": {
-      "~/*": ["*"]
+      "~/*": ["*"],
+      "@app/*": ["app/*"],
+      "@features/*": ["features/*"],
+      "@components/*": ["components/*"],
+      "@lib/*": ["lib/*"],
+      "@providers/*": ["providers/*"],
+      "@styles/*": ["styles/*"],
+      "@utils/*": ["utils/*"],
+      "@types/*": ["types/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "lib/appwrite.js", "context/AuthContext.js"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "lib/appwrite.ts",
+    "context/AuthContext.js"
+  ]
 }

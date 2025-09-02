@@ -1,11 +1,7 @@
 import { Redirect, Tabs } from 'expo-router';
 import { Home, Trophy, User } from 'lucide-react-native';
-import { useAuth } from '~/context/AuthContext';
 
 export default function TabLayout() {
-  const { session } = useAuth();
-  if (!session) return <Redirect href={'/(auth)/auth'} />;
-
   return (
     <Tabs>
       <Tabs.Screen

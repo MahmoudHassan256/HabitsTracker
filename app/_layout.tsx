@@ -1,15 +1,14 @@
 import React from 'react';
-import { TamaguiProvider } from 'tamagui';
 import { Slot, Stack } from 'expo-router';
-import config from '../tamagui.config';
-import { AuthProvider } from '../context/AuthContext';
+import { AuthProvider } from '@providers/AuthProvider';
+import { UIProvider } from '@providers/UIProvider';
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <TamaguiProvider config={config}>
-        <Slot screenOptions={{ headerShown: false }} />
-      </TamaguiProvider>
-    </AuthProvider>
+    <UIProvider>
+      <AuthProvider>
+        <Slot />
+      </AuthProvider>
+    </UIProvider>
   );
 }
