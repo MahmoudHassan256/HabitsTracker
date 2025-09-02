@@ -11,8 +11,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-// If using React Navigation
-// import { useNavigation } from '@react-navigation/native';
 
 interface NotFoundScreenProps {
   navigation?: any; // Replace with proper navigation type if using React Navigation

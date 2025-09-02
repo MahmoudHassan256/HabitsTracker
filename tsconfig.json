@@ -3,7 +3,6 @@
   "compilerOptions": {
     "strict": true,
     "jsx": "react-jsx",
-
     "baseUrl": ".",
     "paths": {
       "~/*": ["*"],
@@ -14,7 +13,9 @@
       "@providers/*": ["providers/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
-      "@types/*": ["types/*"]
+      "@types/*": ["types/*"],
+      "@/*": ["./*"],
+      "tailwind.config": ["./tailwind.config.js"]
     }
   },
   "include": [
@@ -23,6 +24,7 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "lib/appwrite.ts",
-    "context/AuthContext.js"
+    "context/AuthContext.js",
+    "nativewind-env.d.ts"
   ]
 }
