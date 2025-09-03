@@ -37,7 +37,7 @@ export default function Profile() {
       <VStack space="6" className="items-center mt-10">
         {/* Avatar */}
         <Box className="rounded-full overflow-hidden w-24 h-24 mb-4">
-          <Image source={{ uri: mockUser.avatar_url }} className="w-24 h-24 rounded-full" />
+          <Image source={{ uri: mockUser.avatar_url }} className="w-24 h-24 rounded-full" alt="" />
         </Box>
 
         {/* Name & Email */}

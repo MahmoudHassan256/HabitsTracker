@@ -14,7 +14,7 @@ const UIContext = createContext<UIContextType>({
 export const useUI = () => useContext(UIContext);
 
 export function UIProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<'light' | 'dark'>('dark');
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
 
   const toggleTheme = () => setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
 
