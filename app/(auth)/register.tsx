@@ -178,8 +178,8 @@ export default function Register() {
                 <Text size="sm" className="text-primary-700">
                   Already have an account?
                 </Text>
-                <Pressable onPress={navigateToLogin}>
-                  <Link>
+                <Pressable>
+                  <Link onPress={navigateToLogin}>
                     <LinkText size="sm" className="text-primary-700 font-medium">
                       Sign In
                     </LinkText>

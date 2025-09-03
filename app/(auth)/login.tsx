@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Box } from '~/components/ui/box';
@@ -28,6 +28,14 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.replace('/(tabs)/home');
+    }, 2000);
+
+    return () => clearTimeout(timer); // cleanup
+  }, []);
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -82,7 +90,7 @@ export default function Login() {
                 <Heading size="3xl" className="text-primary-600 text-center">
                   Welcome Back
                 </Heading>
-                <Text size="md" className="text-typography-600 text-center">
+                <Text size="md" className="text-primary-600 text-center">
                   Sign in to your account
                 </Text>
               </Box>
@@ -104,7 +112,6 @@ export default function Login() {
                         autoCapitalize="none"
                         autoCorrect={false}
                         returnKeyType="next"
-                        autoFocus
                       />
                     </Input>
                     <FormControlError>

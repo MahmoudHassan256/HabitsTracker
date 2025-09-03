@@ -27,6 +27,11 @@
       "supportsTablet": true
     },
     "android": {
+      "statusBar": {
+        "hidden": true,
+        "translucent": true,
+        "backgroundColor": "#000000"
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
