@@ -15,11 +15,12 @@ import {
   FormControlErrorText,
 } from '~/components/ui/form-control';
 import { Divider } from '~/components/ui/divider';
-import { Pressable } from '~/components/ui/pressable';
 import { Link, LinkText } from '~/components/ui/link';
 import { VStack } from '~/components/ui/vstack';
 import { HStack } from '~/components/ui/hstack';
 import { useRouter } from 'expo-router';
+import { register } from '~/features/auth/services/auth';
+import { useAuth } from '~/providers/AuthProvider';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -29,26 +30,24 @@ export default function Register() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
+  const { refresh } = useAuth();
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const navigateToLogin = () => {
-    router.replace('/(auth)/login');
-  };
+  const navigateToLogin = () => router.replace('/(auth)/login');
 
   const handleRegister = async () => {
-    // Reset errors
     setNameError('');
     setEmailError('');
     setPasswordError('');
-    let isValid = true;
 
+    let isValid = true;
     if (!name) {
       setNameError('Name is required');
       isValid = false;
     }
-
     if (!email) {
       setEmailError('Email is required');
       isValid = false;
@@ -56,12 +55,11 @@ export default function Register() {
       setEmailError('Please enter a valid email');
       isValid = false;
     }
-
     if (!password) {
       setPasswordError('Password is required');
       isValid = false;
-    } else if (password.length < 6) {
-      setPasswordError('Password must be at least 6 characters');
+    } else if (password.length < 8) {
+      setPasswordError('Password must be at least 8 characters');
       isValid = false;
     }
 
@@ -69,11 +67,12 @@ export default function Register() {
 
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log('Registering:', { name, email, password });
-      // Redirect to login after successful registration
-      router.replace('/(auth)/login');
+      await register(name, email, password);
+      await refresh();
+      router.replace('/(tabs)/home');
+    } catch (err: any) {
+      console.log('Register failed:', err);
+      setPasswordError(err.message || 'Something went wrong, please try again');
     } finally {
       setIsLoading(false);
     }
@@ -178,13 +177,11 @@ export default function Register() {
                 <Text size="sm" className="text-primary-700">
                   Already have an account?
                 </Text>
-                <Pressable>
-                  <Link onPress={navigateToLogin}>
-                    <LinkText size="sm" className="text-primary-700 font-medium">
-                      Sign In
-                    </LinkText>
-                  </Link>
-                </Pressable>
+                <Link onPress={navigateToLogin}>
+                  <LinkText size="sm" className="text-primary-700 font-medium">
+                    Sign In
+                  </LinkText>
+                </Link>
               </HStack>
             </VStack>
           </Box>

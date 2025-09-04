@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Platform, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Box } from '~/components/ui/box';
@@ -15,11 +15,12 @@ import {
   FormControlErrorText,
 } from '~/components/ui/form-control';
 import { Divider } from '~/components/ui/divider';
-import { Pressable } from '~/components/ui/pressable';
 import { Link, LinkText } from '~/components/ui/link';
 import { VStack } from '~/components/ui/vstack';
 import { HStack } from '~/components/ui/hstack';
 import { useRouter } from 'expo-router';
+import { login } from '~/features/auth/services/auth';
+import { useAuth } from '~/providers/AuthProvider';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -27,25 +28,15 @@ export default function Login() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.replace('/(tabs)/home');
-    }, 2000);
-
-    return () => clearTimeout(timer); // cleanup
-  }, []);
+  const { user, refresh } = useAuth();
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const navigateToRegister = () => {
-    router.replace('/(auth)/register');
-  };
+  const navigateToRegister = () => router.replace('/(auth)/register');
 
   const handleLogin = async () => {
-    setIsLoading(true);
-
     setEmailError('');
     setPasswordError('');
     let isValid = true;
@@ -61,8 +52,8 @@ export default function Login() {
     if (!password) {
       setPasswordError('Password is required');
       isValid = false;
-    } else if (password.length < 6) {
-      setPasswordError('Password must be at least 6 characters');
+    } else if (password.length < 8) {
+      setPasswordError('Password must be at least 8 characters');
       isValid = false;
     }
 
@@ -70,8 +61,12 @@ export default function Login() {
 
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log('Logging In:', { email, password });
+      await login(email, password);
+      await refresh();
+      router.replace('/(tabs)/home');
+    } catch (err: any) {
+      console.log('Login failed:', err);
+      setPasswordError(err.message || 'Something went wrong, please try again');
     } finally {
       setIsLoading(false);
     }
@@ -158,13 +153,11 @@ export default function Login() {
                 <Text size="sm" className="text-primary-700">
                   Don't have an account?
                 </Text>
-                <Pressable>
-                  <Link onPress={navigateToRegister}>
-                    <LinkText size="sm" className="text-primary-700 font-medium">
-                      Sign Up
-                    </LinkText>
-                  </Link>
-                </Pressable>
+                <Link onPress={navigateToRegister}>
+                  <LinkText size="sm" className="text-primary-700 font-medium">
+                    Sign Up
+                  </LinkText>
+                </Link>
               </HStack>
             </VStack>
           </Box>

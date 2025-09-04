@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { account } from '../lib/appwrite';
+import { User } from '~/lib/types';
 
 interface AuthContextValue {
-  user: any | null;
+  user: User;
   loading: boolean;
   refresh: () => Promise<void>;
-  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -14,34 +14,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
+  /** Initialize authentication */
   const refresh = async () => {
+    setLoading(true);
     try {
-      const me = await account.get();
-      setUser(me);
-    } catch {
+      const currentUser = await account.get();
+      setUser(currentUser as User);
+    } catch (error) {
       setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
+  // Run once when provider mounts
   useEffect(() => {
     refresh();
   }, []);
 
-  const logout = async () => {
-    try {
-      await account.deleteSession('current');
-    } finally {
-      await refresh();
-    }
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, loading, refresh, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, loading, refresh }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {

@@ -4,11 +4,21 @@ import { useRouter } from 'expo-router';
 import { Center } from '~/components/ui/center';
 import { Pressable } from '~/components/ui/pressable';
 import { useUI } from '~/providers/UIProvider';
+import { useAuth } from '~/providers/AuthProvider';
+import { useEffect } from 'react';
+import LoadingScreen from '~/components/LoadingScreen';
 
 export default function TabLayout() {
   const router = useRouter();
   const { mode } = useUI();
+  const { user, loading } = useAuth();
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace('/(auth)/login'); // not logged in → go login
+    }
+  }, [user, loading]);
 
+  if (loading) return <LoadingScreen />;
   return (
     <Tabs
       screenOptions={{
